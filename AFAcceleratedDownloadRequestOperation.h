@@ -19,3 +19,8 @@
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#import "AFHTTPRequestOperation.h"
+
+@interface AFAcceleratedDownloadRequestOperation : AFHTTPRequestOperation
+
+@end

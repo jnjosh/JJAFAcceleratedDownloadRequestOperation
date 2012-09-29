@@ -8,6 +8,8 @@
 
 #import "JJAppDelegate.h"
 
+#import "AFNetworking.h"
+
 @implementation JJAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

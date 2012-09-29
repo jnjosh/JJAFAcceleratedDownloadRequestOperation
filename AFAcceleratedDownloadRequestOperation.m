@@ -20,3 +20,11 @@
 //
 
 #import "AFAcceleratedDownloadRequestOperation.h"
+
+@interface AFAcceleratedDownloadRequestOperation ()
+
+@end
+
+@implementation AFAcceleratedDownloadRequestOperation
+
+@end
