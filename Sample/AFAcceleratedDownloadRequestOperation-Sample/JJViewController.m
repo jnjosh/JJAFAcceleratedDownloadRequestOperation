@@ -39,6 +39,11 @@
 	AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
 	[operation setMaximumChunkSize:3];
 	
+	[operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
+		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead)) * 100;
+		NSLog(@"download number %i %f%%: %u %llu %llu", chunkIndex, percentDone, bytesRead, totalBytesRead, totalBytesExpectedToRead);
+	}];
+	
 	const uint64_t startTime = mach_absolute_time();
 	
 	[operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {

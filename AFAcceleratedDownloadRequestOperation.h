@@ -21,10 +21,15 @@
 
 #import "AFHTTPRequestOperation.h"
 
+typedef void(^AFAcceleratedDownloadRequestProgressBlock)(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead);
+
 @interface AFAcceleratedDownloadRequestOperation : AFHTTPRequestOperation
 
 /** Defines the maximum size of single chunks for downloading a file */
 @property (nonatomic, assign) NSUInteger maximumChunkSize;
+
+/** Progress Block on the download */
+@property (nonatomic, copy) AFAcceleratedDownloadRequestProgressBlock progressBlock;
 
 /** Designated Initializer to create a download operation with resume support
  * @param urlRequest request to the resource being downloaded

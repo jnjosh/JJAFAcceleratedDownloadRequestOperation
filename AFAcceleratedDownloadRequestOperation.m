@@ -172,10 +172,11 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 		[downloadRequest setValue:rangeString forHTTPHeaderField:@"Range"];
 		
 		AFHTTPRequestOperation *downloadOperation = [[AFHTTPRequestOperation alloc] initWithRequest:downloadRequest];
-//		[downloadOperation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-//			float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead)) * 100;
-//			NSLog(@"download number %i %f%%: %u %llu %llu %@", downloadNumber, percentDone, bytesRead, totalBytesRead, totalBytesExpectedToRead, requestSize);
-//		}];
+		[downloadOperation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+			if (weak_self.progressBlock) {
+				weak_self.progressBlock(downloadNumber, bytesRead, totalBytesRead, totalBytesExpectedToRead);
+			}
+		}];
 
 		[downloadOperation setOutputStream:stream];
 		[weak_self.downloadedData addObject:stream];
