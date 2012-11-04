@@ -21,12 +21,19 @@
 
 #import "AFHTTPRequestOperation.h"
 
+typedef NS_ENUM(NSUInteger, AFAcceleratedDownloadChunkSize) {
+	AFAcceleratedDownloadChunkSizeSingle = 1,
+	AFAcceleratedDownloadChunkSizeMinimal = 2,
+	AFAcceleratedDownloadChunkSizeRecommended = 3,
+	AFAcceleratedDownloadChunkSizeLudicrous = 4
+};
+
 typedef void(^AFAcceleratedDownloadRequestProgressBlock)(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead);
 
 @interface AFAcceleratedDownloadRequestOperation : AFHTTPRequestOperation
 
 /** Defines the maximum size of single chunks for downloading a file */
-@property (nonatomic, assign) NSUInteger maximumChunkSize;
+@property (nonatomic, assign) AFAcceleratedDownloadChunkSize maximumChunkSize;
 
 /** Progress Block on the download */
 @property (nonatomic, copy) AFAcceleratedDownloadRequestProgressBlock progressBlock;

@@ -39,9 +39,10 @@
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	
 	AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
-	[operation setMaximumChunkSize:3];
+	[operation setMaximumChunkSize:AFAcceleratedDownloadChunkSizeRecommended];
 	
 	__weak UIProgressView *weakProgress = self.progressView;
+	__weak UIImageView *weakImageView = self.imageView;
 	
 	[operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
 		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
@@ -59,7 +60,7 @@
 
 		UIImage *image = [[UIImage alloc] initWithData:responseObject scale:[[UIScreen mainScreen] scale]];
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.imageView setImage:image];
+			[weakImageView setImage:image];
 		});
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSLog(@"Failed all");
@@ -83,6 +84,7 @@
 	AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
 	
 	__weak UIProgressView *weakProgress = self.progressView;
+	__weak UIImageView *weakImageView = self.imageView;
 
 	[operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
 		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
@@ -100,7 +102,7 @@
 
 		UIImage *image = [[UIImage alloc] initWithData:responseObject];
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.imageView setImage:image];
+			[weakImageView setImage:image];
 		});
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSLog(@"Failed");
