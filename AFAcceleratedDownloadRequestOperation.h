@@ -23,4 +23,14 @@
 
 @interface AFAcceleratedDownloadRequestOperation : AFHTTPRequestOperation
 
+/** Defines the maximum size of single chunks for downloading a file */
+@property (nonatomic, assign) NSUInteger maximumChunkSize;
+
+/** Designated Initializer to create a download operation with resume support
+ * @param urlRequest request to the resource being downloaded
+ * @param shouldResume should the download request be resumed from a prior attempt or start over
+ * @return instance of class AFAcceleratedDownloadRequestOperation
+ */
+- (id)initWithRequest:(NSURLRequest *)urlRequest shouldResume:(BOOL)shouldResume;
+
 @end

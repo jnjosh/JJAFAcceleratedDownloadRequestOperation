@@ -26,6 +26,8 @@
 		A45E0B3A1616BA9E00E23C6D /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A45E0B2F1616BA9E00E23C6D /* AFURLConnectionOperation.m */; };
 		A45E0B3B1616BA9E00E23C6D /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A45E0B311616BA9E00E23C6D /* AFXMLRequestOperation.m */; };
 		A45E0B3C1616BA9E00E23C6D /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = A45E0B331616BA9E00E23C6D /* UIImageView+AFNetworking.m */; };
+		A45E0B3F1617EEDE00E23C6D /* JJViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A45E0B3E1617EEDE00E23C6D /* JJViewController.m */; };
+		A477FE88164635A200407DFE /* JJViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A477FE87164635A200407DFE /* JJViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +65,9 @@
 		A45E0B311616BA9E00E23C6D /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFXMLRequestOperation.m; path = Libraries/AFNetworking/AFNetworking/AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		A45E0B321616BA9E00E23C6D /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+AFNetworking.h"; path = "Libraries/AFNetworking/AFNetworking/UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		A45E0B331616BA9E00E23C6D /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "Libraries/AFNetworking/AFNetworking/UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		A45E0B3D1617EEDE00E23C6D /* JJViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJViewController.h; sourceTree = "<group>"; };
+		A45E0B3E1617EEDE00E23C6D /* JJViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJViewController.m; sourceTree = "<group>"; };
+		A477FE87164635A200407DFE /* JJViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JJViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +118,9 @@
 			children = (
 				A45E0AE71616B6F200E23C6D /* JJAppDelegate.h */,
 				A45E0AE81616B6F200E23C6D /* JJAppDelegate.m */,
+				A45E0B3D1617EEDE00E23C6D /* JJViewController.h */,
+				A45E0B3E1617EEDE00E23C6D /* JJViewController.m */,
+				A477FE87164635A200407DFE /* JJViewController.xib */,
 				A45E0ADF1616B6F200E23C6D /* Supporting Files */,
 			);
 			path = "AFAcceleratedDownloadRequestOperation-Sample";
@@ -231,6 +239,7 @@
 				A45E0AEB1616B6F200E23C6D /* Default.png in Resources */,
 				A45E0AED1616B6F200E23C6D /* Default@2x.png in Resources */,
 				A45E0AEF1616B6F200E23C6D /* Default-568h@2x.png in Resources */,
+				A477FE88164635A200407DFE /* JJViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +262,7 @@
 				A45E0B3A1616BA9E00E23C6D /* AFURLConnectionOperation.m in Sources */,
 				A45E0B3B1616BA9E00E23C6D /* AFXMLRequestOperation.m in Sources */,
 				A45E0B3C1616BA9E00E23C6D /* UIImageView+AFNetworking.m in Sources */,
+				A45E0B3F1617EEDE00E23C6D /* JJViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
