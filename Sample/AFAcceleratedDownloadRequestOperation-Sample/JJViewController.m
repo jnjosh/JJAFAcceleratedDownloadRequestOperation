@@ -14,7 +14,8 @@
 
 @interface JJViewController ()
 
-@property (nonatomic, strong) IBOutlet UIImageView *imageView;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@property (nonatomic, weak) IBOutlet UIProgressView *progressView;
 
 - (IBAction)downloadAccelerated:(id)sender;
 - (IBAction)downloadNormal:(id)sender;
@@ -26,6 +27,7 @@
 - (void)downloadAccelerated:(id)sender
 {
 	[[NSURLCache sharedURLCache] removeAllCachedResponses];
+	[self.progressView setProgress:0];
 	
 	mach_timebase_info_data_t info;
 	mach_timebase_info(&info);
@@ -39,8 +41,11 @@
 	AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
 	[operation setMaximumChunkSize:3];
 	
+	__weak UIProgressView *weakProgress = self.progressView;
+	
 	[operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
-		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead)) * 100;
+		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
+		[weakProgress setProgress:percentDone];
 		NSLog(@"download number %i %f%%: %u %llu %llu", chunkIndex, percentDone, bytesRead, totalBytesRead, totalBytesExpectedToRead);
 	}];
 	
@@ -76,6 +81,14 @@
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+	
+	__weak UIProgressView *weakProgress = self.progressView;
+
+	[operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
+		[weakProgress setProgress:percentDone];
+		NSLog(@"download %f%%: %u %llu %llu", percentDone, bytesRead, totalBytesRead, totalBytesExpectedToRead);
+	}];
 	
 	const uint64_t startTime = mach_absolute_time();
 	
