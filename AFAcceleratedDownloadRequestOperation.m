@@ -181,14 +181,6 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 
 		[downloadOperation setOutputStream:stream];
 		[weak_self.downloadedData addObject:stream];
-		
-		[downloadOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//			NSOutputStream *stream = [weak_self.downloadedData objectAtIndex:downloadNumber];
-//			[stream close];
-		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-			NSLog(@"download error: %@", [error localizedDescription]);
-		}];
-		
 		[operationSet addObject:downloadOperation];
 		chunkPosition += chunkSize + 1;
 		
@@ -211,11 +203,12 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 	
 	AFHTTPRequestOperation *headOperation = [[AFHTTPRequestOperation alloc] initWithRequest:headRequest];
 	[headOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+		// TODO: If 200, only create one request since it should be 206 when supported
+
+		// TODO: Parse this content range better
 		NSString *contentLengthString = [operation.response.allHeaderFields objectForKey:@"Content-Range"];
 		contentLengthString = [contentLengthString stringByReplacingOccurrencesOfString:@"bytes 0-1/" withString:@""];
 		NSInteger contentLength = [contentLengthString integerValue];
-
-		// TODO: If 200, only create one request since it should be 206 when supported
 		
 		NSSet *operations = [weak_self operationsForURL:operation.request.URL contentSize:contentLength chunks:weak_self.maximumChunkSize];
 		NSOperation *finishOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -240,7 +233,7 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 		[weak_self.innerQueue addOperation:finishOperation];
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		
-		// handle HEAD error
+		// TODO: Handle HEAD operation error case
 		
 	}];
 	

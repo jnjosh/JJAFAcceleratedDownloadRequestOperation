@@ -15,6 +15,7 @@
 
 @interface JJViewController ()
 
+@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) IBOutlet JJChunkedProgressView *chunkedProgressView;
 
@@ -33,9 +34,10 @@
 	mach_timebase_info(&info);
 	
 	[self.imageView setImage:nil];
+	[self.timeLabel setText:nil];
 	[self.chunkedProgressView setChunks:AFAcceleratedDownloadChunkSizeRecommended];
 
-	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/someimage.png"];
+	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/Raleigh-Skyline.png"];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	
 	AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
@@ -43,6 +45,7 @@
 	
 	__weak JJChunkedProgressView *weakProgress = self.chunkedProgressView;
 	__weak UIImageView *weakImageView = self.imageView;
+	__weak UILabel *timeLabel = self.timeLabel;
 	
 	[operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
 		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
@@ -55,10 +58,11 @@
 		const uint64_t endTime = mach_absolute_time();
 		const uint64_t elapsedMTU = endTime - startTime;
 		const double elapsedNS = (double)elapsedMTU * (double)info.numer / (double)info.denom;
-		NSLog(@"Accelerated Elapsed %f", elapsedNS / NSEC_PER_SEC);
-
+		float seconds = elapsedNS / NSEC_PER_SEC;
+		
 		UIImage *image = [[UIImage alloc] initWithData:responseObject scale:[[UIScreen mainScreen] scale]];
 		dispatch_async(dispatch_get_main_queue(), ^{
+			[timeLabel setText:[NSString stringWithFormat:@"%f seconds", seconds]];
 			[weakImageView setImage:image];
 		});
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -76,15 +80,17 @@
 	mach_timebase_info(&info);
 	
 	[self.imageView setImage:nil];
+	[self.timeLabel setText:nil];
 	[self.chunkedProgressView setChunks:1];
 
-	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/someimage.png"];
-	
+	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/Raleigh-Skyline.png"];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
 	AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
 	
 	__weak JJChunkedProgressView *weakProgress = self.chunkedProgressView;
 	__weak UIImageView *weakImageView = self.imageView;
+	__weak UILabel *timeLabel = self.timeLabel;
 
 	[operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
 		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
@@ -97,10 +103,11 @@
 		const uint64_t endTime = mach_absolute_time();
 		const uint64_t elapsedMTU = endTime - startTime;
 		const double elapsedNS = (double)elapsedMTU * (double)info.numer / (double)info.denom;
-		NSLog(@"Normal Elapsed %f", elapsedNS / NSEC_PER_SEC);
+		float seconds = elapsedNS / NSEC_PER_SEC;
 
 		UIImage *image = [[UIImage alloc] initWithData:responseObject];
 		dispatch_async(dispatch_get_main_queue(), ^{
+			[timeLabel setText:[NSString stringWithFormat:@"%f seconds", seconds]];
 			[weakImageView setImage:image];
 		});
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -111,26 +118,5 @@
 	
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	
-	// Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 @end
