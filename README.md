@@ -1,12 +1,48 @@
 # AFAcceleratedDownloadRequestOperation
 
-AFNetworking is a delightful library for providing a reliable network stack in your application. I needed a download operation that would attempt to download a file in multiple chunks on multiple connections, so this is it.
+I was curious if downloading ranges of a file would be faster than 1 request. At the same time I was curious about creating an AFNetworking "extension". Putting those two ideas together creates `AFAcceleratedDownloadRequestOperation`, a subclass of  `AFHTTPOperation` that will break up a download request into multiple request "chunks" to download at the same time. Here is a video of it in action:
 
-## AFNetworking
+[AFAcceleratedDownloadRequestOperation video](http://jsh.in/KfBi)
 
-This is built against the latest branch of AFNetworking, 1.0RC2
+## JJChunkedProgressView ##
 
-## Usage
+This project also contains `JJChunkedProgressView` which allows you to update progress for different parts of a download operation. Potentially needs to be broken out into it's own project.
+
+## AFNetworking ##
+
+This is built on top of the amazing AFNetworking library targeting the latest branch: tagged 1.0.1.
+
+## TODO ##
+
+- Add Resume support for when the download is paused
+- Detect if server doesn't support ranges and create one request
+- Error handling for when the worst happens
+- Test with (and create progress view for) AppKit downloading on OS X
+- Lots of testing
+
+## Usage ##
+
+'''objective-c
+    // Setup Request
+    NSURL *url = [NSURL URLWithString:@"<URL to big file>"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    // Setup Operation
+    AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
+    [operation setMaximumChunkSize:AFAcceleratedDownloadChunkSizeRecommended];
+    
+    // Get Progress Updates
+    [operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
+        float percentDoneForChunk = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
+        // Use the percentage
+    }];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // responseObject is NSData of the downloaded file
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Download Failed");
+    }];
+'''
 
 ## Creator
 
