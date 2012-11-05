@@ -22,7 +22,7 @@ This is built on top of the amazing AFNetworking library targeting the latest br
 
 ## Usage ##
 
-'''objective-c
+```objective-c
     // Setup Request
     NSURL *url = [NSURL URLWithString:@"<URL to big file>"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -42,7 +42,7 @@ This is built on top of the amazing AFNetworking library targeting the latest br
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Download Failed");
     }];
-'''
+```
 
 ## Creator
 
