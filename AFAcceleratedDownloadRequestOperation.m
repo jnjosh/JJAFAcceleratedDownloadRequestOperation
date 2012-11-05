@@ -183,9 +183,8 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 		[weak_self.downloadedData addObject:stream];
 		
 		[downloadOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-			NSOutputStream *stream = [weak_self.downloadedData objectAtIndex:downloadNumber];
-			[stream close];
-			//			NSLog(@"download number %i finished", downloadNumber);
+//			NSOutputStream *stream = [weak_self.downloadedData objectAtIndex:downloadNumber];
+//			[stream close];
 		} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 			NSLog(@"download error: %@", [error localizedDescription]);
 		}];
@@ -212,9 +211,6 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 	
 	AFHTTPRequestOperation *headOperation = [[AFHTTPRequestOperation alloc] initWithRequest:headRequest];
 	[headOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//		NSInteger statusCode = operation.response.statusCode;
-//		NSLog(@"%i", statusCode);
-		
 		NSString *contentLengthString = [operation.response.allHeaderFields objectForKey:@"Content-Range"];
 		contentLengthString = [contentLengthString stringByReplacingOccurrencesOfString:@"bytes 0-1/" withString:@""];
 		NSInteger contentLength = [contentLengthString integerValue];

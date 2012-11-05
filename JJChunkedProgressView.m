@@ -71,6 +71,17 @@ static UIColor *jj_chunkedProgressViewDefaultBackgroundColor = nil;
 
 #pragma mark - Drawing
 
+- (void)drawPathForRect:(CGRect)drawingRect context:(CGContextRef)context radius:(CGFloat)radius
+{
+	CGContextBeginPath(context);
+	CGContextMoveToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMidY(drawingRect));
+	CGContextAddArcToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMinY(drawingRect), CGRectGetMidX(drawingRect), CGRectGetMinY(drawingRect), radius);
+	CGContextAddArcToPoint(context, CGRectGetMaxX(drawingRect), CGRectGetMinY(drawingRect), CGRectGetMaxX(drawingRect), CGRectGetMidY(drawingRect), radius);
+	CGContextAddArcToPoint(context, CGRectGetMaxX(drawingRect), CGRectGetMaxY(drawingRect), CGRectGetMidX(drawingRect), CGRectGetMaxY(drawingRect), radius);
+	CGContextAddArcToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMaxY(drawingRect), CGRectGetMinX(drawingRect), CGRectGetMidY(drawingRect), radius);
+	CGContextClosePath(context);
+}
+
 - (void)drawRect:(CGRect)rect
 {
 	[super drawRect:rect];
@@ -88,70 +99,30 @@ static UIColor *jj_chunkedProgressViewDefaultBackgroundColor = nil;
 	[borderColor setStroke];
 
 	CGContextSetLineWidth(context, 2.0f);
-	CGContextBeginPath(context);
-	CGContextMoveToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMidY(drawingRect));
-	CGContextAddArcToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMinY(drawingRect), CGRectGetMidX(drawingRect), CGRectGetMinY(drawingRect), radius);
-	CGContextAddArcToPoint(context, CGRectGetMaxX(drawingRect), CGRectGetMinY(drawingRect), CGRectGetMaxX(drawingRect), CGRectGetMidY(drawingRect), radius);
-	CGContextAddArcToPoint(context, CGRectGetMaxX(drawingRect), CGRectGetMaxY(drawingRect), CGRectGetMidX(drawingRect), CGRectGetMaxY(drawingRect), radius);
-	CGContextAddArcToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMaxY(drawingRect), CGRectGetMinX(drawingRect), CGRectGetMidY(drawingRect), radius);
-	CGContextClosePath(context);
+	[self drawPathForRect:drawingRect context:context radius:radius];
 	CGContextDrawPath(context, kCGPathStroke);
 	
 	// Draw Track Background
 	drawingRect = CGRectInset(drawingRect, 3.0f, 3.0f);
 	radius = drawingRect.size.height * 0.5f;
 	[trackBackgroundColor setFill];
-	
-	CGContextBeginPath(context) ;
-	CGContextMoveToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMidY(drawingRect)) ;
-	CGContextAddArcToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMinY(drawingRect), CGRectGetMidX(drawingRect), CGRectGetMinY(drawingRect), radius) ;
-	CGContextAddArcToPoint(context, CGRectGetMaxX(drawingRect), CGRectGetMinY(drawingRect), CGRectGetMaxX(drawingRect), CGRectGetMidY(drawingRect), radius) ;
-	CGContextAddArcToPoint(context, CGRectGetMaxX(drawingRect), CGRectGetMaxY(drawingRect), CGRectGetMidX(drawingRect), CGRectGetMaxY(drawingRect), radius) ;
-	CGContextAddArcToPoint(context, CGRectGetMinX(drawingRect), CGRectGetMaxY(drawingRect), CGRectGetMinX(drawingRect), CGRectGetMidY(drawingRect), radius) ;
-	CGContextClosePath(context) ;
-	CGContextFillPath(context) ;
+	[self drawPathForRect:drawingRect context:context radius:radius];
+	CGContextFillPath(context);
     
 	// Draw Progress Segments
 	CGFloat segmentWidth = drawingRect.size.width / self.chunkCount;
 	CGRect segmentRect =  (CGRect){ drawingRect.origin, { segmentWidth, drawingRect.size.height }};
 	[progressColor setFill];
-	
+	[self drawPathForRect:drawingRect context:context radius:radius];
+	CGContextClip(context);
+
 	for (NSUInteger segment = 0; segment < self.chunkCount; segment++) {
 		CGFloat progress = [self progressAtChunkIndex:segment];
-		CGRect segmentDrawRect = segmentRect;
+		CGRect segmentDrawRect = CGRectIntegral(segmentRect);
 		segmentDrawRect.size.width *= progress;
-		if (segmentDrawRect.size.width < radius) {
-			segmentDrawRect.size.width = radius;
-		}
 		
-		// Draw Segment
-		CGContextBeginPath(context);
-		
-		if (segment == 0) {
-			// If it is the first segment, we curve on the left edge and flat on the right edge
-			CGContextMoveToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMidY(segmentDrawRect));
-			CGContextAddArcToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMinY(segmentDrawRect), CGRectGetMaxX(segmentDrawRect), CGRectGetMinY(segmentDrawRect), radius);
-			CGContextAddLineToPoint(context, CGRectGetMaxX(segmentDrawRect), CGRectGetMinY(segmentDrawRect));
-			CGContextAddLineToPoint(context, CGRectGetMaxX(segmentDrawRect), CGRectGetMaxY(segmentDrawRect));
-			CGContextAddArcToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMaxY(segmentDrawRect), CGRectGetMinX(segmentDrawRect), CGRectGetMidY(segmentDrawRect), radius);
-		} else if (segment == (self.chunkCount - 1)) {
-			// If it is the last segment, we are flat on the left edge and curved on the right
-			CGContextMoveToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMinY(segmentDrawRect));
-			CGContextAddArcToPoint(context, CGRectGetMaxX(segmentDrawRect), CGRectGetMinY(segmentDrawRect), CGRectGetMaxX(segmentDrawRect), CGRectGetMidY(segmentDrawRect), radius);
-			CGContextAddArcToPoint(context, CGRectGetMaxX(segmentDrawRect), CGRectGetMaxY(segmentDrawRect), CGRectGetMinX(segmentDrawRect), CGRectGetMaxY(segmentDrawRect), radius);
-			CGContextAddLineToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMaxY(segmentDrawRect));
-			CGContextAddLineToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMinY(segmentDrawRect));
-		} else {
-			// If in the middle we are flat on both sides
-			CGContextMoveToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMinY(segmentDrawRect));
-			CGContextAddLineToPoint(context, CGRectGetMaxX(segmentDrawRect), CGRectGetMinY(segmentDrawRect));
-			CGContextAddLineToPoint(context, CGRectGetMaxX(segmentDrawRect), CGRectGetMaxY(segmentDrawRect));
-			CGContextAddLineToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMaxY(segmentDrawRect));
-			CGContextAddLineToPoint(context, CGRectGetMinX(segmentDrawRect), CGRectGetMinY(segmentDrawRect));
-		}
+		CGContextFillRect(context, segmentDrawRect);
 
-		CGContextClosePath(context);
-		CGContextFillPath(context);
 		segmentRect.origin.x += segmentWidth;
 	}
 	
