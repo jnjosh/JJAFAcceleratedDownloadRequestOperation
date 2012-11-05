@@ -6,7 +6,13 @@ I was curious if downloading ranges of a file would be faster than 1 request. At
 
 ## JJChunkedProgressView ##
 
-This project also contains `JJChunkedProgressView` which allows you to update progress for different parts of a download operation. Potentially needs to be broken out into it's own project.
+This project also contains `JJChunkedProgressView` which allows you to update progress for different parts of a download operation. Potentially needs to be broken out into it's own project. It does support UIAppearance on:
+
+```objective-c
+@property (nonatomic, strong) UIColor *progressColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *trackBorderColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *trackBackgroundColor UI_APPEARANCE_SELECTOR;
+```
 
 ## AFNetworking ##
 
@@ -19,6 +25,7 @@ This is built on top of the amazing AFNetworking library targeting the latest br
 - Error handling for when the worst happens
 - Test with (and create progress view for) AppKit downloading on OS X
 - Lots of testing
+- Add overall download progress to Progress View
 
 ## Usage ##
 
@@ -42,6 +49,8 @@ This is built on top of the amazing AFNetworking library targeting the latest br
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Download Failed");
     }];
+
+    [operation start];
 ```
 
 ## Creator
