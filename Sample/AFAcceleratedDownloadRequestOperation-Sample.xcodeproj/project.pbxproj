@@ -28,6 +28,7 @@
 		A45E0B3C1616BA9E00E23C6D /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = A45E0B331616BA9E00E23C6D /* UIImageView+AFNetworking.m */; };
 		A45E0B3F1617EEDE00E23C6D /* JJViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A45E0B3E1617EEDE00E23C6D /* JJViewController.m */; };
 		A477FE88164635A200407DFE /* JJViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A477FE87164635A200407DFE /* JJViewController.xib */; };
+		A477FE971646DBDF00407DFE /* JJChunkedProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = A477FE961646DBDF00407DFE /* JJChunkedProgressView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,8 @@
 		A45E0B3D1617EEDE00E23C6D /* JJViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JJViewController.h; sourceTree = "<group>"; };
 		A45E0B3E1617EEDE00E23C6D /* JJViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJViewController.m; sourceTree = "<group>"; };
 		A477FE87164635A200407DFE /* JJViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JJViewController.xib; sourceTree = "<group>"; };
+		A477FE951646DBDF00407DFE /* JJChunkedProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JJChunkedProgressView.h; path = ../JJChunkedProgressView.h; sourceTree = "<group>"; };
+		A477FE961646DBDF00407DFE /* JJChunkedProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JJChunkedProgressView.m; path = ../JJChunkedProgressView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +148,8 @@
 			children = (
 				A45E0AFB1616B74F00E23C6D /* AFAcceleratedDownloadRequestOperation.h */,
 				A45E0AFC1616B74F00E23C6D /* AFAcceleratedDownloadRequestOperation.m */,
+				A477FE951646DBDF00407DFE /* JJChunkedProgressView.h */,
+				A477FE961646DBDF00407DFE /* JJChunkedProgressView.m */,
 			);
 			name = AFAcceleratedDownloadRequestOperation;
 			sourceTree = "<group>";
@@ -263,6 +268,7 @@
 				A45E0B3B1616BA9E00E23C6D /* AFXMLRequestOperation.m in Sources */,
 				A45E0B3C1616BA9E00E23C6D /* UIImageView+AFNetworking.m in Sources */,
 				A45E0B3F1617EEDE00E23C6D /* JJViewController.m in Sources */,
+				A477FE971646DBDF00407DFE /* JJChunkedProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

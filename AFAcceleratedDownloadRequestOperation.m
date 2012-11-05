@@ -143,6 +143,8 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 
 - (NSSet *)operationsForURL:(NSURL *)url contentSize:(NSUInteger)contentSize chunks:(NSUInteger)chunks
 {
+	NSParameterAssert(chunks > 0);
+	
 	NSMutableSet *operationSet = [NSMutableSet set];
 	
 	NSInteger chunkSize = contentSize / chunks;
@@ -165,7 +167,6 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 		
 		NSNumber *requestSizeEnd = @(chunkPosition + chunkSize + divisonBuffer);
 		NSString *rangeString = [NSString stringWithFormat:@"bytes=%i-%@/%i", chunkPosition, requestSizeEnd, contentSize];
-		NSLog(@"range string: %@", rangeString);
 		
 		NSMutableURLRequest *downloadRequest = [NSMutableURLRequest requestWithURL:url];
 		[downloadRequest setValue:@"bytes" forHTTPHeaderField:@"If-Ranges"];

@@ -11,11 +11,13 @@
 #import "JJViewController.h"
 #import "AFNetworking.h"
 #import "AFAcceleratedDownloadRequestOperation.h"
+#import "JJChunkedProgressView.h"
 
 @interface JJViewController ()
 
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) IBOutlet UIProgressView *progressView;
+@property (nonatomic, weak) IBOutlet JJChunkedProgressView *chunkedProgressView;
 
 - (IBAction)downloadAccelerated:(id)sender;
 - (IBAction)downloadNormal:(id)sender;
@@ -33,21 +35,20 @@
 	mach_timebase_info(&info);
 	
 	[self.imageView setImage:nil];
+	[self.chunkedProgressView setChunks:AFAcceleratedDownloadChunkSizeRecommended];
 
 	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/someimage.png"];
-	
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	
 	AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
 	[operation setMaximumChunkSize:AFAcceleratedDownloadChunkSizeRecommended];
 	
-	__weak UIProgressView *weakProgress = self.progressView;
+	__weak JJChunkedProgressView *weakProgress = self.chunkedProgressView;
 	__weak UIImageView *weakImageView = self.imageView;
 	
 	[operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
 		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
-		[weakProgress setProgress:percentDone];
-		NSLog(@"download number %i %f%%: %u %llu %llu", chunkIndex, percentDone, bytesRead, totalBytesRead, totalBytesExpectedToRead);
+		[weakProgress setProgress:percentDone chunkIndex:chunkIndex];
 	}];
 	
 	const uint64_t startTime = mach_absolute_time();
@@ -124,7 +125,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
 	
 	// Do any additional setup after loading the view.
 }

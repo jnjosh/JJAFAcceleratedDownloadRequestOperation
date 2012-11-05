@@ -9,10 +9,16 @@
 #import "JJAppDelegate.h"
 #import "JJViewController.h"
 
+#import "JJChunkedProgressView.h"
+
 @implementation JJAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	[[JJChunkedProgressView appearance] setProgressColor:[UIColor whiteColor]];
+	[[JJChunkedProgressView appearance] setTrackBackgroundColor:[UIColor lightGrayColor]];
+	[[JJChunkedProgressView appearance] setTrackBorderColor:[UIColor whiteColor]];
+	
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	[self.window setRootViewController:[[JJViewController alloc] initWithNibName:nil bundle:nil]];
     self.window.backgroundColor = [UIColor whiteColor];
