@@ -19,8 +19,8 @@
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import <tgmath.h>
 #import "JJAFAcceleratedDownloadRequestOperation.h"
+#import <tgmath.h>
 
 #if !__has_feature(objc_arc)
 #error "JJAFAcceleratedDownloadRequestOperation requires compiling with ARC."
