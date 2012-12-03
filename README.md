@@ -1,8 +1,8 @@
-# AFAcceleratedDownloadRequestOperation
+# JJAFAcceleratedDownloadRequestOperation
 
-I was curious if downloading ranges of a file would be faster than 1 request. At the same time I was curious about creating an AFNetworking "extension". Putting those two ideas together creates `AFAcceleratedDownloadRequestOperation`, a subclass of  `AFHTTPOperation` that will break up a download request into multiple request "chunks" to download at the same time. Here is a video of it in action:
+I was curious if downloading ranges of a file would be faster than 1 request. At the same time I was curious about creating an AFNetworking "extension". Putting those two ideas together creates `JJAFAcceleratedDownloadRequestOperation`, a subclass of  `AFHTTPOperation` that will break up a download request into multiple request "chunks" to download at the same time. Here is a video of it in action:
 
-[AFAcceleratedDownloadRequestOperation video](http://jsh.in/KfBi)
+[JJAFAcceleratedDownloadRequestOperation video](http://jsh.in/KfBi)
 
 ## JJChunkedProgressView ##
 
@@ -35,8 +35,8 @@ This is built on top of the amazing AFNetworking library targeting the latest br
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     // Setup Operation
-    AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
-    [operation setMaximumChunkSize:AFAcceleratedDownloadChunkSizeRecommended];
+    JJAFAcceleratedDownloadRequestOperation *operation = [[JJAFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
+    [operation setMaximumChunkSize:JJAFAcceleratedDownloadChunkSizeRecommended];
     
     // Get Progress Updates
     [operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
@@ -59,4 +59,4 @@ This is built on top of the amazing AFNetworking library targeting the latest br
 
 ## License
 
-`AFAcceleratedDownloadRequestOperation` is available under the MIT License, please see the LICENSE file for more information.
+`JJAFAcceleratedDownloadRequestOperation` is available under the MIT License, please see the [LICENSE file for more information](http://jnjosh.mit-license.org/).
