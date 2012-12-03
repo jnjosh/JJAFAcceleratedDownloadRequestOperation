@@ -10,8 +10,10 @@
 #include <stdint.h>
 #import "JJViewController.h"
 #import "AFNetworking.h"
-#import "AFAcceleratedDownloadRequestOperation.h"
+#import "JJAFAcceleratedDownloadRequestOperation.h"
 #import "JJChunkedProgressView.h"
+
+static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSizeRecommended;
 
 @interface JJViewController ()
 
@@ -35,13 +37,13 @@
 	
 	[self.imageView setImage:nil];
 	[self.timeLabel setText:nil];
-	[self.chunkedProgressView setChunks:AFAcceleratedDownloadChunkSizeRecommended];
+	[self.chunkedProgressView setChunks:kJJConcurrentDownloads];
 
 	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/Raleigh-Skyline.png"];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	
-	AFAcceleratedDownloadRequestOperation *operation = [[AFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
-	[operation setMaximumChunkSize:AFAcceleratedDownloadChunkSizeRecommended];
+	JJAFAcceleratedDownloadRequestOperation *operation = [[JJAFAcceleratedDownloadRequestOperation alloc] initWithRequest:request];
+	[operation setMaximumChunkSize:kJJConcurrentDownloads];
 	
 	__weak JJChunkedProgressView *weakProgress = self.chunkedProgressView;
 	__weak UIImageView *weakImageView = self.imageView;

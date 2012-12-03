@@ -1,5 +1,5 @@
 //
-//  AFAcceleratedDownloadRequestOperation.h
+//  JJAFAcceleratedDownloadRequestOperation.h
 //
 //  Copyright (c) 2012 Josh Johnson
 //
@@ -21,27 +21,27 @@
 
 #import "AFHTTPRequestOperation.h"
 
-typedef NS_ENUM(NSUInteger, AFAcceleratedDownloadChunkSize) {
-	AFAcceleratedDownloadChunkSizeSingle = 1,
-	AFAcceleratedDownloadChunkSizeMinimal = 2,
-	AFAcceleratedDownloadChunkSizeRecommended = 3,
-	AFAcceleratedDownloadChunkSizeLudicrous = 4
+typedef NS_ENUM(NSUInteger, JJAFAcceleratedDownloadChunkSize) {
+	JJAFAcceleratedDownloadChunkSizeSingle = 1,
+	JJAFAcceleratedDownloadChunkSizeMinimal = 2,
+	JJAFAcceleratedDownloadChunkSizeRecommended = 3,
+	JJAFAcceleratedDownloadChunkSizeLudicrous = 4
 };
 
-typedef void(^AFAcceleratedDownloadRequestProgressBlock)(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead);
+typedef void(^JJAFAcceleratedDownloadRequestProgressBlock)(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead);
 
-@interface AFAcceleratedDownloadRequestOperation : AFHTTPRequestOperation
+@interface JJAFAcceleratedDownloadRequestOperation : AFHTTPRequestOperation
 
 /** Defines the maximum size of single chunks for downloading a file */
-@property (nonatomic, assign) AFAcceleratedDownloadChunkSize maximumChunkSize;
+@property (nonatomic, assign) JJAFAcceleratedDownloadChunkSize maximumChunkSize;
 
 /** Progress Block on the download */
-@property (nonatomic, copy) AFAcceleratedDownloadRequestProgressBlock progressBlock;
+@property (nonatomic, copy) JJAFAcceleratedDownloadRequestProgressBlock progressBlock;
 
 /** Designated Initializer to create a download operation with resume support
  * @param urlRequest request to the resource being downloaded
  * @param shouldResume should the download request be resumed from a prior attempt or start over
- * @return instance of class AFAcceleratedDownloadRequestOperation
+ * @return instance of class JJAFAcceleratedDownloadRequestOperation
  */
 - (id)initWithRequest:(NSURLRequest *)urlRequest shouldResume:(BOOL)shouldResume;
 

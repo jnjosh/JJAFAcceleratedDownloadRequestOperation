@@ -1,5 +1,5 @@
 //
-//  AFAcceleratedDownloadRequestOperation.m
+//  JJAFAcceleratedDownloadRequestOperation.m
 //
 //  Copyright (c) 2012 Josh Johnson
 //
@@ -20,18 +20,18 @@
 //
 
 #import <tgmath.h>
-#import "AFAcceleratedDownloadRequestOperation.h"
+#import "JJAFAcceleratedDownloadRequestOperation.h"
 
 #if !__has_feature(objc_arc)
-#error "AFAcceleratedDownloadRequestOperation requires compiling with ARC."
+#error "JJAFAcceleratedDownloadRequestOperation requires compiling with ARC."
 #endif
 
-NSString * const kAFInternalCachedURLFolderPrefix = @"af_";
-NSString * const kAFInternalCachedFolderName = @"Incomplete";
-NSString * const kAFInternalDownloadInformation = @"af_download.plist";
-static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
+NSString * const kJJAFInternalCachedURLFolderPrefix = @"jjaf_";
+NSString * const kJJAFInternalCachedFolderName = @"Incomplete";
+NSString * const kJJAFInternalDownloadInformation = @"jjaf_download.plist";
+static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 
-@interface AFAcceleratedDownloadRequestOperation ()
+@interface JJAFAcceleratedDownloadRequestOperation ()
 
 @property (nonatomic, strong) NSData *responseData;
 @property (nonatomic, assign, getter = shouldResume) BOOL resume;
@@ -47,36 +47,36 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 
 @end
 
-@implementation AFAcceleratedDownloadRequestOperation
+@implementation JJAFAcceleratedDownloadRequestOperation
 
 #pragma mark - Class methods
 
 + (NSString *)downloadCacheFolder
 {
 	static dispatch_once_t downloadFolder_onceToken;
-	static NSString *af_internal_acceleratedDownloadRequestCacheFolder = nil;
+	static NSString *jjaf_internal_acceleratedDownloadRequestCacheFolder = nil;
 
 	dispatch_once(&downloadFolder_onceToken, ^{
-		af_internal_acceleratedDownloadRequestCacheFolder = [NSTemporaryDirectory() stringByAppendingString:kAFInternalCachedFolderName];
+		jjaf_internal_acceleratedDownloadRequestCacheFolder = [NSTemporaryDirectory() stringByAppendingString:kJJAFInternalCachedFolderName];
 		
 		NSError *folderError;
-		[[NSFileManager defaultManager] createDirectoryAtPath:af_internal_acceleratedDownloadRequestCacheFolder
+		[[NSFileManager defaultManager] createDirectoryAtPath:jjaf_internal_acceleratedDownloadRequestCacheFolder
 								  withIntermediateDirectories:YES
 												   attributes:nil
 														error:&folderError];
 		
 		if (folderError) {
-			NSLog(@"Failed to create cache folder for download: %@", af_internal_acceleratedDownloadRequestCacheFolder);
+			NSLog(@"Failed to create cache folder for download: %@", jjaf_internal_acceleratedDownloadRequestCacheFolder);
 		}
 	});
 	
-	return af_internal_acceleratedDownloadRequestCacheFolder;
+	return jjaf_internal_acceleratedDownloadRequestCacheFolder;
 }
 
 + (NSURL *)downloadCacheURLForURL:(NSURL *)url
 {
 	NSURL *folderURL = [NSURL fileURLWithPath:[self downloadCacheFolder] isDirectory:YES];
-	NSString *folderName = [NSString stringWithFormat:@"%@%u", kAFInternalCachedURLFolderPrefix, url.absoluteString.hash];
+	NSString *folderName = [NSString stringWithFormat:@"%@%u", kJJAFInternalCachedURLFolderPrefix, url.absoluteString.hash];
 	
 	NSURL *urlCacheFolderURL = [folderURL URLByAppendingPathComponent:folderName isDirectory:YES];
 	
@@ -104,7 +104,7 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 		_innerQueue = [[NSOperationQueue alloc] init];
 		[_innerQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
 		_resume = shouldResume;
-		_maximumChunkSize = kAFInternalDefaultMaximumChunkSize;
+		_maximumChunkSize = kJJAFInternalDefaultMaximumChunkSize;
 		_downloadedData = [NSMutableArray array];
 	}
 	return self;
@@ -115,7 +115,7 @@ static const NSUInteger kAFInternalDefaultMaximumChunkSize = 4;
 	return [self initWithRequest:urlRequest shouldResume:YES];
 }
 
-#pragma mark - AFHTTPRequestOperation overrides
+#pragma mark - JJAFHTTPRequestOperation overrides
 
 - (void)start
 {
