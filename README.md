@@ -21,7 +21,6 @@ This is built on top of the amazing AFNetworking library targeting the latest br
 ## TODO ##
 
 - Add Resume support for when the download is paused
-- Detect if server doesn't support ranges and create one request
 - Error handling for when the worst happens
 - Test with (and create progress view for) AppKit downloading on OS X
 - Lots of testing
