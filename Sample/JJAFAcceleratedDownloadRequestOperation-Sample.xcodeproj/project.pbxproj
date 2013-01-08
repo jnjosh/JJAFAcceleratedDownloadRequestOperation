@@ -28,7 +28,7 @@
 		A45E0B3F1617EEDE00E23C6D /* JJViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A45E0B3E1617EEDE00E23C6D /* JJViewController.m */; };
 		A477FE88164635A200407DFE /* JJViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A477FE87164635A200407DFE /* JJViewController.xib */; };
 		A477FE971646DBDF00407DFE /* JJChunkedProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = A477FE961646DBDF00407DFE /* JJChunkedProgressView.m */; };
-		A483DAC1166A42140004DF9E /* JJAFAcceleratedDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A483DAC0166A42140004DF9E /* JJAFAcceleratedDownloadRequestOperation.m */; };
+		A4E79BBF169BCA4E00941CF4 /* JJAFAcceleratedDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E79BBE169BCA4E00941CF4 /* JJAFAcceleratedDownloadRequestOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,7 +70,7 @@
 		A477FE87164635A200407DFE /* JJViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JJViewController.xib; sourceTree = "<group>"; };
 		A477FE951646DBDF00407DFE /* JJChunkedProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JJChunkedProgressView.h; path = ../JJChunkedProgressView.h; sourceTree = "<group>"; };
 		A477FE961646DBDF00407DFE /* JJChunkedProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JJChunkedProgressView.m; path = ../JJChunkedProgressView.m; sourceTree = "<group>"; };
-		A483DAC0166A42140004DF9E /* JJAFAcceleratedDownloadRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJAFAcceleratedDownloadRequestOperation.m; sourceTree = "<group>"; };
+		A4E79BBE169BCA4E00941CF4 /* JJAFAcceleratedDownloadRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JJAFAcceleratedDownloadRequestOperation.m; path = ../JJAFAcceleratedDownloadRequestOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,8 +146,8 @@
 		A45E0AF91616B73B00E23C6D /* JJAFAcceleratedDownloadRequestOperation */ = {
 			isa = PBXGroup;
 			children = (
+				A4E79BBE169BCA4E00941CF4 /* JJAFAcceleratedDownloadRequestOperation.m */,
 				A45E0AFB1616B74F00E23C6D /* JJAFAcceleratedDownloadRequestOperation.h */,
-				A483DAC0166A42140004DF9E /* JJAFAcceleratedDownloadRequestOperation.m */,
 				A477FE951646DBDF00407DFE /* JJChunkedProgressView.h */,
 				A477FE961646DBDF00407DFE /* JJChunkedProgressView.m */,
 			);
@@ -268,7 +268,7 @@
 				A45E0B3C1616BA9E00E23C6D /* UIImageView+AFNetworking.m in Sources */,
 				A45E0B3F1617EEDE00E23C6D /* JJViewController.m in Sources */,
 				A477FE971646DBDF00407DFE /* JJChunkedProgressView.m in Sources */,
-				A483DAC1166A42140004DF9E /* JJAFAcceleratedDownloadRequestOperation.m in Sources */,
+				A4E79BBF169BCA4E00941CF4 /* JJAFAcceleratedDownloadRequestOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

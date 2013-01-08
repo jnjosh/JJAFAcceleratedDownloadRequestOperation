@@ -20,6 +20,8 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) IBOutlet JJChunkedProgressView *chunkedProgressView;
+@property (weak, nonatomic) IBOutlet UIButton *multiDownloadButton;
+@property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 
 - (IBAction)downloadAccelerated:(id)sender;
 - (IBAction)downloadNormal:(id)sender;
@@ -30,6 +32,9 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 
 - (void)downloadAccelerated:(id)sender
 {
+	[self.multiDownloadButton setEnabled:NO];
+	[self.downloadButton setEnabled:NO];
+	
 	[[NSURLCache sharedURLCache] removeAllCachedResponses];
 	
 	mach_timebase_info_data_t info;
@@ -38,6 +43,11 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 	[self.imageView setImage:nil];
 	[self.timeLabel setText:nil];
 	[self.chunkedProgressView setChunks:kJJConcurrentDownloads];
+
+	// Sample URL that does not support partial: http://f.cl.ly/items/373d3j2u0C1Z1v2Y2H2A/image.jpg
+	// Sample URL that does support partial: http://api.badmovieapp.com/Raleigh-Skyline.png
+
+	const uint64_t startTime = mach_absolute_time();
 
 	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/Raleigh-Skyline.png"];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -54,7 +64,9 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 		[weakProgress setProgress:percentDone chunkIndex:chunkIndex];
 	}];
 	
-	const uint64_t startTime = mach_absolute_time();
+	[operation setChunkSizeChangeBlock:^(NSUInteger newChunkSize) {
+		[weakProgress setChunks:newChunkSize];
+	}];
 	
 	[operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
 		const uint64_t endTime = mach_absolute_time();
@@ -66,6 +78,10 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[timeLabel setText:[NSString stringWithFormat:@"%f seconds", seconds]];
 			[weakImageView setImage:image];
+			
+			[self.multiDownloadButton setEnabled:YES];
+			[self.downloadButton setEnabled:YES];
+
 		});
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSLog(@"Failed all");
@@ -76,6 +92,9 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 
 - (void)downloadNormal:(id)sender
 {
+	[self.multiDownloadButton setEnabled:NO];
+	[self.downloadButton setEnabled:NO];
+
 	[[NSURLCache sharedURLCache] removeAllCachedResponses];
 	
 	mach_timebase_info_data_t info;
@@ -111,13 +130,15 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[timeLabel setText:[NSString stringWithFormat:@"%f seconds", seconds]];
 			[weakImageView setImage:image];
+			
+			[self.multiDownloadButton setEnabled:YES];
+			[self.downloadButton setEnabled:YES];
 		});
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSLog(@"Failed");
 	}];
 	
-	[operation start];
-	
+	[operation start];	
 }
 
 

@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, JJAFAcceleratedDownloadChunkSize) {
 };
 
 typedef void(^JJAFAcceleratedDownloadRequestProgressBlock)(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead);
+typedef void(^JJAFAcceleratedDownloadRequestChangeChunkSizeBlock)(NSUInteger newChunkSize);
 
 @interface JJAFAcceleratedDownloadRequestOperation : AFHTTPRequestOperation
 
@@ -37,6 +38,14 @@ typedef void(^JJAFAcceleratedDownloadRequestProgressBlock)(NSUInteger chunkIndex
 
 /** Progress Block on the download */
 @property (nonatomic, copy) JJAFAcceleratedDownloadRequestProgressBlock progressBlock;
+
+/** Block to notify owner of changes in block size 
+ @discussion Since support for this ranged download request is dependent on the server being called, the 
+			 JJAFAcceleratedDownloadRequestOperation may change the amount of chunks being downloaded
+			 dynamically. This is an opportunity to change any state on the progress control displaying
+			 multiple downloads (like a JJChunkedProgressView).
+ */
+@property (nonatomic, copy) JJAFAcceleratedDownloadRequestChangeChunkSizeBlock chunkSizeChangeBlock;
 
 /** Designated Initializer to create a download operation with resume support
  * @param urlRequest request to the resource being downloaded

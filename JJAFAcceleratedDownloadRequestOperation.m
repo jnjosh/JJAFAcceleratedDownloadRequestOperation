@@ -19,16 +19,21 @@
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import <tgmath.h>
 #import "JJAFAcceleratedDownloadRequestOperation.h"
+#import <tgmath.h>
 
 #if !__has_feature(objc_arc)
 #error "JJAFAcceleratedDownloadRequestOperation requires compiling with ARC."
 #endif
 
-NSString * const kJJAFInternalCachedURLFolderPrefix = @"JJAF_";
+typedef NS_ENUM(NSInteger, JJAFHTTPStatusCode) {
+	JJAFHTTPStatusCodeOk = 200,
+	JJAFHTTPStatusCodePartial = 206
+};
+
+NSString * const kJJAFInternalCachedURLFolderPrefix = @"jjaf_";
 NSString * const kJJAFInternalCachedFolderName = @"Incomplete";
-NSString * const kJJAFInternalDownloadInformation = @"JJAF_download.plist";
+NSString * const kJJAFInternalDownloadInformation = @"jjaf_download.plist";
 static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 
 @interface JJAFAcceleratedDownloadRequestOperation ()
@@ -54,23 +59,23 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 + (NSString *)downloadCacheFolder
 {
 	static dispatch_once_t downloadFolder_onceToken;
-	static NSString *JJAF_internal_acceleratedDownloadRequestCacheFolder = nil;
+	static NSString *jjaf_internal_acceleratedDownloadRequestCacheFolder = nil;
 
 	dispatch_once(&downloadFolder_onceToken, ^{
-		JJAF_internal_acceleratedDownloadRequestCacheFolder = [NSTemporaryDirectory() stringByAppendingString:kJJAFInternalCachedFolderName];
+		jjaf_internal_acceleratedDownloadRequestCacheFolder = [NSTemporaryDirectory() stringByAppendingString:kJJAFInternalCachedFolderName];
 		
 		NSError *folderError;
-		[[NSFileManager defaultManager] createDirectoryAtPath:JJAF_internal_acceleratedDownloadRequestCacheFolder
+		[[NSFileManager defaultManager] createDirectoryAtPath:jjaf_internal_acceleratedDownloadRequestCacheFolder
 								  withIntermediateDirectories:YES
 												   attributes:nil
 														error:&folderError];
 		
 		if (folderError) {
-			NSLog(@"Failed to create cache folder for download: %@", JJAF_internal_acceleratedDownloadRequestCacheFolder);
+			NSLog(@"Failed to create cache folder for download: %@", jjaf_internal_acceleratedDownloadRequestCacheFolder);
 		}
 	});
 	
-	return JJAF_internal_acceleratedDownloadRequestCacheFolder;
+	return jjaf_internal_acceleratedDownloadRequestCacheFolder;
 }
 
 + (NSURL *)downloadCacheURLForURL:(NSURL *)url
@@ -203,14 +208,23 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 	
 	AFHTTPRequestOperation *headOperation = [[AFHTTPRequestOperation alloc] initWithRequest:headRequest];
 	[headOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-		// TODO: If 200, only create one request since it should be 206 when supported
-
+		NSInteger statusCode = operation.response.statusCode;
+		NSUInteger chunkSize = statusCode == JJAFHTTPStatusCodePartial ? weak_self.maximumChunkSize : 1;
+		if (chunkSize != weak_self.maximumChunkSize) {
+			if (self.chunkSizeChangeBlock) {
+				self.chunkSizeChangeBlock(chunkSize);
+			}
+		}
+			
 		// TODO: Parse this content range better
 		NSString *contentLengthString = [operation.response.allHeaderFields objectForKey:@"Content-Range"];
 		contentLengthString = [contentLengthString stringByReplacingOccurrencesOfString:@"bytes 0-1/" withString:@""];
 		NSInteger contentLength = [contentLengthString integerValue];
 		
-		NSSet *operations = [weak_self operationsForURL:operation.request.URL contentSize:contentLength chunks:weak_self.maximumChunkSize];
+		NSSet *operations = [weak_self operationsForURL:operation.request.URL
+											contentSize:contentLength
+												 chunks:chunkSize];
+		
 		NSOperation *finishOperation = [NSBlockOperation blockOperationWithBlock:^{
 			
 			NSMutableData *compiledData = [NSMutableData data];
@@ -224,13 +238,14 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 				weak_self.completionBlock();
 			}
 		}];
-
+		
 		for (NSOperation *operation in operations) {
 			[finishOperation addDependency:operation];
 			[weak_self.innerQueue addOperation:operation];
 		}
 		
 		[weak_self.innerQueue addOperation:finishOperation];
+
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		
 		// TODO: Handle HEAD operation error case
