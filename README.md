@@ -53,9 +53,9 @@ This is built on top of the amazing AFNetworking library targeting the latest br
     [operation start];
 ```
 
-## Creator
+## Contact
 
-[Josh Johnson](http://jnjosh.com) [@jnjosh](http://twitter.com/jnjosh)
+- [Josh Johnson](http://jnjosh.com) [@jnjosh](http://twitter.com/jnjosh)
 
 ## License
 
