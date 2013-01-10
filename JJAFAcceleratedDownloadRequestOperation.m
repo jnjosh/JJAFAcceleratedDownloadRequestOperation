@@ -149,10 +149,12 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 
 - (void)notifyOverallProgress
 {
-	void(^downloadBlock)(NSUInteger bytes, long long totalBytes, long long totalBytesExpected) = [self performSelector:@selector(downloadProgress) withObject:nil];
-	
-	if (downloadBlock) {
-		downloadBlock(self.downloadedBytes, self.downloadedBytes, self.totalBytesToDownload);
+	if ([self respondsToSelector:@selector(downloadProgress)]) {
+		void(^downloadBlock)(NSUInteger bytes, long long totalBytes, long long totalBytesExpected) = [self performSelector:@selector(downloadProgress) withObject:nil];
+		
+		if (downloadBlock) {
+			downloadBlock(self.downloadedBytes, self.downloadedBytes, self.totalBytesToDownload);
+		}
 	}
 }
 
