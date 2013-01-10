@@ -146,8 +146,8 @@
 		A45E0AF91616B73B00E23C6D /* JJAFAcceleratedDownloadRequestOperation */ = {
 			isa = PBXGroup;
 			children = (
-				A4E79BBE169BCA4E00941CF4 /* JJAFAcceleratedDownloadRequestOperation.m */,
 				A45E0AFB1616B74F00E23C6D /* JJAFAcceleratedDownloadRequestOperation.h */,
+				A4E79BBE169BCA4E00941CF4 /* JJAFAcceleratedDownloadRequestOperation.m */,
 				A477FE951646DBDF00407DFE /* JJChunkedProgressView.h */,
 				A477FE961646DBDF00407DFE /* JJChunkedProgressView.m */,
 			);

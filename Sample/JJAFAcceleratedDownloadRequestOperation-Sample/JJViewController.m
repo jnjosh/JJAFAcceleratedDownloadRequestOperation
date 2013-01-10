@@ -20,6 +20,8 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) IBOutlet JJChunkedProgressView *chunkedProgressView;
+@property (weak, nonatomic) IBOutlet UIProgressView *totalProgressView;
+
 @property (weak, nonatomic) IBOutlet UIButton *multiDownloadButton;
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 
@@ -42,6 +44,8 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 	
 	[self.imageView setImage:nil];
 	[self.timeLabel setText:nil];
+	[self.totalProgressView setProgress:0];
+	[self.totalProgressView setHidden:NO];
 	[self.chunkedProgressView setChunks:kJJConcurrentDownloads];
 
 	// Sample URL that does not support partial: http://f.cl.ly/items/373d3j2u0C1Z1v2Y2H2A/image.jpg
@@ -56,12 +60,18 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 	[operation setMaximumChunkSize:kJJConcurrentDownloads];
 	
 	__weak JJChunkedProgressView *weakProgress = self.chunkedProgressView;
+	__weak UIProgressView *weakTotalProgress = self.totalProgressView;
 	__weak UIImageView *weakImageView = self.imageView;
 	__weak UILabel *timeLabel = self.timeLabel;
 	
 	[operation setProgressBlock:^(NSUInteger chunkIndex, NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
 		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
 		[weakProgress setProgress:percentDone chunkIndex:chunkIndex];
+	}];
+	
+	[operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+		float percentDone = ((float)((int)totalBytesRead) / (float)((int)totalBytesExpectedToRead));
+		[weakTotalProgress setProgress:percentDone];
 	}];
 	
 	[operation setChunkSizeChangeBlock:^(NSUInteger newChunkSize) {
@@ -102,6 +112,7 @@ static const NSUInteger kJJConcurrentDownloads = JJAFAcceleratedDownloadChunkSiz
 	
 	[self.imageView setImage:nil];
 	[self.timeLabel setText:nil];
+	[self.totalProgressView setHidden:YES];
 	[self.chunkedProgressView setChunks:1];
 
 	NSURL *url = [NSURL URLWithString:@"http://api.badmovieapp.com/Raleigh-Skyline.png"];

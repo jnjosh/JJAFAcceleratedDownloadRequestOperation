@@ -44,6 +44,9 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 
 @property (nonatomic, strong) NSMutableArray *downloadedData;
 
+@property (nonatomic, assign) NSUInteger totalBytesToDownload;
+@property (nonatomic, assign) NSUInteger downloadedBytes;
+
 + (NSString *)downloadCacheFolder;
 + (NSURL *)downloadCacheURLForURL:(NSURL *)url;
 
@@ -144,6 +147,15 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 	}];
 }
 
+- (void)notifyOverallProgress
+{
+	void(^downloadBlock)(NSUInteger bytes, long long totalBytes, long long totalBytesExpected) = [self performSelector:@selector(downloadProgress) withObject:nil];
+	
+	if (downloadBlock) {
+		downloadBlock(self.downloadedBytes, self.downloadedBytes, self.totalBytesToDownload);
+	}
+}
+
 #pragma mark - Helpers
 
 - (NSSet *)operationsForURL:(NSURL *)url contentSize:(NSUInteger)contentSize chunks:(NSUInteger)chunks
@@ -182,6 +194,9 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 			if (weak_self.progressBlock) {
 				weak_self.progressBlock(downloadNumber, bytesRead, totalBytesRead, totalBytesExpectedToRead);
 			}
+
+			weak_self.downloadedBytes += bytesRead;
+			[weak_self notifyOverallProgress];
 		}];
 
 		[downloadOperation setOutputStream:stream];
@@ -239,6 +254,7 @@ static const NSUInteger kJJAFInternalDefaultMaximumChunkSize = 4;
 			}
 		}];
 		
+		weak_self.totalBytesToDownload = contentLength;
 		for (NSOperation *operation in operations) {
 			[finishOperation addDependency:operation];
 			[weak_self.innerQueue addOperation:operation];
