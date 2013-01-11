@@ -1,6 +1,8 @@
 # JJAFAcceleratedDownloadRequestOperation
 
-I was curious if downloading ranges of a file would be faster than 1 request. At the same time I was curious about creating an AFNetworking "extension". Putting those two ideas together creates `JJAFAcceleratedDownloadRequestOperation`, a subclass of  `AFHTTPOperation` that will break up a download request into multiple request "chunks" to download at the same time. Here is a video of it in action:
+I was curious if downloading ranges of a file would be faster than 1 request. At the same time I was curious about creating an AFNetworking "extension". Putting those two ideas together creates `JJAFAcceleratedDownloadRequestOperation`, a subclass of  `AFHTTPOperation` that will break up a download request into multiple request "chunks" to download at the same time. 
+
+Here is a video of it in action:
 
 [JJAFAcceleratedDownloadRequestOperation video](http://jsh.in/KfBi)
 
@@ -51,6 +53,30 @@ This is built on top of the amazing AFNetworking library targeting the latest br
 
     [operation start];
 ```
+
+## Contributing
+
+As stated above, this is mostly an experimental project build out of curiosity. Probabably no where near ready for use in a production app. However, if you'd like to hack on it, please do and I'd be glad to check it out. 
+
+__rake__
+
+I've added some build tools using [xcoder](https://github.com/rayh/xcoder) and __rake__ that can help get you started and will soon be able to run some unit tests. 
+
+Rake is a ruby tool that can be installed on your machine. The best setup is to use __bundler__ via:
+
+    `gem install bundle`
+
+After cloning from github, `cd` into the project directory and run:
+
+    `bundle install`
+
+Finally, setup the project by running:
+
+    `rake tools:setup`
+
+Other commands available:
+
+    rake build:sample  # Build Sample
 
 ## Contact
 
