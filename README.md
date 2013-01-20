@@ -6,6 +6,15 @@ Here is a video of it in action:
 
 [JJAFAcceleratedDownloadRequestOperation video](http://jsh.in/KfBi)
 
+## TODO ##
+
+Still a lot of work to do before this is fully useful. 
+
+- Add Resume support for when the download is paused
+- Error handling for when the worst happens
+- Test with (and create progress view for) AppKit downloading on OS X
+- Lots of testing
+
 ## JJChunkedProgressView ##
 
 This project also contains `JJChunkedProgressView` which allows you to update progress for different parts of a download operation. Potentially needs to be broken out into it's own project. It does support UIAppearance on:
@@ -19,14 +28,6 @@ This project also contains `JJChunkedProgressView` which allows you to update pr
 ## AFNetworking ##
 
 This is built on top of the amazing AFNetworking library targeting the latest branch: tagged 1.0.1.
-
-## TODO ##
-
-- Add Resume support for when the download is paused
-- Error handling for when the worst happens
-- Test with (and create progress view for) AppKit downloading on OS X
-- Lots of testing
-- Add overall download progress to Progress View
 
 ## Usage ##
 
